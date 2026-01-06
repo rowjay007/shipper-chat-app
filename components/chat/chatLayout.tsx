@@ -122,10 +122,22 @@ export function ChatLayout() {
                 <img 
                   src="/⌘+K.svg" 
                   alt="⌘+K" 
-                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  style={{ 
+                    width: '26px',
+                    height: '10px',
+                    objectFit: 'contain',
+                    display: 'block',
+                    flexShrink: 0
+                  }}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = "/⌘+K.png";
+                    const currentSrc = target.src;
+                    if (!currentSrc.includes('⌘+K.png')) {
+                      target.src = "/⌘+K.png";
+                    }
+                  }}
+                  onLoad={() => {
+                    // Prevent blinking by ensuring image is loaded
                   }}
                 />
               </button>
