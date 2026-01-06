@@ -34,13 +34,21 @@ export function ChatWindow() {
   const avatarUrl = otherUser ? getRandomAvatar(otherUser.name) : undefined;
 
   useEffect(() => {
-    if (!selectedRoom) return
+    if (!selectedRoom) {
+      setLoading(false)
+      return
+    }
 
     const loadMessages = async () => {
       setLoading(true)
       
       try {
         const response = await fetch(`/api/chat/messages?roomId=${selectedRoom.id}`)
+        
+        if (!response.ok) {
+          throw new Error(`Failed to load messages: ${response.status}`)
+        }
+        
         const data = await response.json()
 
         if (data.messages) {
@@ -57,9 +65,12 @@ export function ChatWindow() {
             updatedAt: msg.updatedAt,
             sender: msg.sender,
           })))
+        } else {
+          setMessages(selectedRoom.id, [])
         }
       } catch (error) {
         console.error('Error loading messages:', error)
+        setMessages(selectedRoom.id, [])
       } finally {
         setLoading(false)
       }
