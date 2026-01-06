@@ -24,11 +24,19 @@ app.prepare().then(() => {
     }
   });
 
+  const allowedOrigins = [
+    process.env.NEXT_PUBLIC_APP_URL,
+    "https://shipper-chat-app-p2xb.onrender.com",
+    "http://localhost:3000",
+  ].filter(Boolean);
+
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+      origin: allowedOrigins,
       methods: ["GET", "POST"],
+      credentials: true,
     },
+    transports: ['websocket', 'polling'],
   });
 
   io.on("connection", (socket) => {
