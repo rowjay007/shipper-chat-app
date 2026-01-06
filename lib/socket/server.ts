@@ -18,7 +18,7 @@ export function initSocketServer(httpServer: HTTPServer): SocketIOServer {
     socket.on("user:online", async (userId: string) => {
       await prisma.user.update({
         where: { id: userId },
-        data: { isOnline: true, lastSeen: new Date() },
+        data: { onlineStatus: true, lastSeen: new Date() },
       });
 
       socket.join(`user:${userId}`);
@@ -28,7 +28,7 @@ export function initSocketServer(httpServer: HTTPServer): SocketIOServer {
     socket.on("user:offline", async (userId: string) => {
       await prisma.user.update({
         where: { id: userId },
-        data: { isOnline: false, lastSeen: new Date() },
+        data: { onlineStatus: false, lastSeen: new Date() },
       });
 
       io.emit("user:status", { userId, isOnline: false });
