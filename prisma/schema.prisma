@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String             @id @default(uuid())
+  email            String             @unique
+  name             String?
+  avatar           String?
+  provider         String?
+  onlineStatus     Boolean            @default(false) @map("online_status")
+  lastSeen         DateTime?          @default(now()) @map("last_seen")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  sentMessages     Message[]          @relation("SentMessages")
+  chatParticipants ChatParticipant[]
+
+  @@map("users")
+}
+
+model ChatRoom {
+  id               String            @id @default(uuid())
+  type             String            @default("direct")
+  lastMessageAt    DateTime?         @map("last_message_at")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  messages         Message[]
+  participants     ChatParticipant[]
+
+  @@map("chat_rooms")
+}
+
+model ChatParticipant {
+  id                String    @id @default(uuid())
+  userId            String    @map("user_id")
+  roomId            String    @map("room_id")
+  joinedAt          DateTime  @default(now()) @map("joined_at")
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRoom          ChatRoom  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roomId])
+  @@map("chat_participants")
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  content    String
+  roomId     String   @map("room_id")
+  senderId   String   @map("sender_id")
+  receiverId String?  @map("receiver_id")
+  isRead     Boolean  @default(false) @map("is_read")
+  isAi       Boolean  @default(false) @map("is_ai")
+  metadata   Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  chatRoom   ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([roomId])
+  @@index([senderId])
+  @@map("messages")
+}
+
