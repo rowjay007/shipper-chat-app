@@ -119,7 +119,15 @@ export function ChatLayout() {
                   paddingLeft: '6px'
                 }}
               >
-                <img src="/⌘+K.png" alt="⌘+K" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img 
+                  src="/⌘+K.svg" 
+                  alt="⌘+K" 
+                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/⌘+K.png";
+                  }}
+                />
               </button>
             </div>
             <button className="rounded-lg p-2 hover:bg-gray-100 transition-colors">

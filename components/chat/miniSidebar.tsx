@@ -56,7 +56,15 @@ export function MiniSidebar() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="mb-8 flex h-11 w-11 items-center justify-center hover:opacity-80 transition-opacity">
-            <img src="/Container.svg" alt="Menu" className="h-11 w-11" />
+            <img 
+              src="/Container.svg" 
+              alt="Menu" 
+              className="h-11 w-11"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/Container.png";
+              }}
+            />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
