@@ -51,7 +51,7 @@ export function initSocketServer(httpServer: HTTPServer): SocketIOServer {
       }) => {
         const message = await prisma.message.create({
           data: {
-            chatRoomId: data.chatRoomId,
+            roomId: data.chatRoomId,
             senderId: data.senderId,
             content: data.content,
           },
