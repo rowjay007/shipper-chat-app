@@ -9,19 +9,15 @@ This document outlines security measures implemented in the Shipper Chat App.
 ### Required Variables (All Environments)
 
 ```bash
-# Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGci...
 
-# Database (Transaction Pooler)
 DATABASE_URL=postgresql://...?pgbouncer=true
 
-# Upstash Redis
 UPSTASH_REDIS_REST_URL=https://...upstash.io
 UPSTASH_REDIS_REST_TOKEN=...
 
-# App URL
 NEXT_PUBLIC_APP_URL=https://your-domain.com
 ```
 
