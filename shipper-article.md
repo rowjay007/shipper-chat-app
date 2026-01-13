@@ -161,10 +161,21 @@ However, at **Enterprise Production Levels** (millions of concurrents), this fai
 
 To rebuild for massive scale (think Slack/Discord), we would decouple **State** from **Persistence**.
 
-1.  **Ingestion (Kafka)**: Write message events to a high-throughput stream, decoupling sending from saving.
-2.  **Real-Time (Dedicated WebSockets)**: A dedicated Go or Node.js fleet for finer connection control.
-3.  **State (Redis)**: Move Presence out of Supabase CRDTs and into Redis Sets for O(1) access.
-4.  **Persistence (ScyllaDB)**: Move chat history to a wide-column store optimized for writes.
+```mermaid
+graph TD
+    Client[Client Device] -->|WebSocket| LB[Load Balancer]
+    LB -->|Terminates SSL| WS[WebSocket Cluster (Go/Node)]
+    
+    subgraph "Real-Time Layer"
+    WS <-->|1. Presence & Pub/Sub| Redis[Redis Cluster]
+    end
+    
+    subgraph "Data Ingestion & Persistence"
+    WS -->|2. Message Events| Kafka[Kafka / Redpanda]
+    Kafka -->|Consume| Worker[Consumer Service]
+    Worker -->|Write| DB[(ScyllaDB / Cassandra)]
+    end
+``` to a wide-column store optimized for writes.
 
 This architecture requires DevOps, monitoring, and money. It is overkill for today, but specific knowledge for tomorrow.
 
