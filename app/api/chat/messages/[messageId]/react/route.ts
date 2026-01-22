@@ -1,9 +1,9 @@
 import { getIo } from "@/lib/socket/socket-manager";
 import { createClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { messageId: string } },
 ) {
   const supabase = await createClient();
@@ -47,7 +47,7 @@ export async function POST(
       .from("messages")
       .update({ reactions })
       .eq("id", messageId)
-      .select()
+      .select("*")
       .single();
 
     if (updateError) throw updateError;
