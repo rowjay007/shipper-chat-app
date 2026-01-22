@@ -1,11 +1,8 @@
 import { getIo } from "@/lib/socket/socket-manager";
 import { createClient } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { messageId: string } },
-) {
+export async function POST(request: NextRequest, { params }: any) {
   const supabase = await createClient();
   const {
     data: { user },
