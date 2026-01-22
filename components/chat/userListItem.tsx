@@ -128,7 +128,7 @@ export function UserListItem({ room }: UserListItemProps) {
 
     updateRoom(room.id, {
       participants: room.participants.map((p) =>
-        p.id === otherParticipant?.id ? { ...p, isArchived: !isArchived } : p
+        p.id === otherParticipant?.id ? { ...p, isArchived: !isArchived } : p,
       ),
     });
 
@@ -146,7 +146,7 @@ export function UserListItem({ room }: UserListItemProps) {
 
     updateRoom(room.id, {
       participants: room.participants.map((p) =>
-        p.id === otherParticipant?.id ? { ...p, isMuted: !isMuted } : p
+        p.id === otherParticipant?.id ? { ...p, isMuted: !isMuted } : p,
       ),
     });
 
@@ -186,75 +186,50 @@ export function UserListItem({ room }: UserListItemProps) {
 
   return (
     <div
-      className="relative overflow-hidden"
-      style={{ width: "352px", height: "64px" }}
+      className="relative overflow-hidden rounded-xl"
+      style={{ width: "100%", height: "64px" }}
     >
       {/* Swipe Actions Background */}
-      {swipeX > 0 && (
-        <div
-          className="absolute inset-y-0 left-0 flex items-center"
-          style={{ gap: "8px", paddingLeft: "8px" }}
-        >
-          <div
-            className="rounded-xl bg-[#F0FDF4] flex flex-col items-center justify-center cursor-pointer"
-            style={{
-              width: "64px",
-              height: "64px",
-              padding: "12px",
-              gap: "8px",
-            }}
-            onClick={handleMarkRead}
-          >
-            <img src="/unread.png" alt="Unread" className="w-6 h-6" />
-            <span
-              className="text-[10px] font-medium text-[#1E9A80]"
-              style={{ width: "44px", height: "16px" }}
+      <div className="absolute inset-0 bg-gray-100 rounded-xl">
+        {swipeX > 0 && (
+          <div className="absolute inset-y-0 left-0 flex items-center pl-2">
+            <div
+              className="flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-[#1E9A80] text-white cursor-pointer"
+              onClick={handleMarkRead}
             >
-              Unread
-            </span>
+              <MessageCircle className="w-5 h-5" />
+              <span className="text-xs font-medium">Unread</span>
+            </div>
           </div>
-        </div>
-      )}
-      {swipeX < 0 && (
-        <div
-          className="absolute inset-y-0 right-0 flex items-center"
-          style={{ gap: "8px", paddingRight: "8px" }}
-        >
-          <div
-            className="rounded-xl bg-[#1E9A80] flex flex-col items-center justify-center cursor-pointer"
-            style={{
-              width: "64px",
-              height: "64px",
-              padding: "12px",
-              gap: "8px",
-            }}
-            onClick={handleArchiveAction}
-          >
-            <img src="/achieve.png" alt="Archive" className="w-6 h-6" />
-            <span
-              className="text-[10px] font-medium text-white"
-              style={{ width: "44px", height: "16px" }}
+        )}
+        {swipeX < 0 && (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <div
+              className="flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-[#1E9A80] text-white cursor-pointer"
+              onClick={handleArchiveAction}
             >
-              Archive
-            </span>
+              <Archive className="w-5 h-5" />
+              <span className="text-xs font-medium">Archive</span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Main Content */}
       <div
         ref={itemRef}
         className={cn(
           "relative flex cursor-pointer items-center select-none",
-          isArchived && "opacity-50"
+          isArchived && "opacity-50",
         )}
         style={{
-          width: "352px",
+          width: "100%",
           height: "64px",
           gap: "12px",
           padding: "12px",
           borderRadius: "12px",
           background: isSelected ? "#E8E5DF" : "#F3F3EE",
+          zIndex: 1,
           transform: `translateX(${swipeX}px)`,
           transition: isDraggingRef.current
             ? "none"
@@ -298,7 +273,7 @@ export function UserListItem({ room }: UserListItemProps) {
                 {truncateText(room.lastMessage.content, 40)}
               </p>
               {isUnread ? (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-teal-500 text-xs text-white font-semibold flex-shrink-0">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#1E9A80] text-xs text-white font-semibold flex-shrink-0">
                   {room.unreadCount}
                 </span>
               ) : isRead ? (

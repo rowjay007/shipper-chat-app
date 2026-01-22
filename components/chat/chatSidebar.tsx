@@ -42,7 +42,7 @@ export function ChatSidebar() {
       const filtered = users.filter(
         (u) =>
           u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          u.email.toLowerCase().includes(searchQuery.toLowerCase())
+          u.email.toLowerCase().includes(searchQuery.toLowerCase()),
       );
       setFilteredUsers(filtered);
     } else {
@@ -123,14 +123,13 @@ export function ChatSidebar() {
         maxWidth: "400px",
         minWidth: "400px",
         height: "932px",
-        padding: "24px",
         gap: "24px",
         borderRadius: "24px",
         maxHeight: "100%",
       }}
     >
       {/* All Message Section */}
-      <div className="flex-shrink-0">
+      <div className="flex-shrink-0 px-6 pt-6">
         <div className="flex items-center justify-between mb-4">
           <h2
             className="text-[20px] leading-[30px] font-semibold text-gray-900"

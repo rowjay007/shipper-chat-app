@@ -1,16 +1,26 @@
 "use client";
 
+import {
+  connectSocket,
+  disconnectSocket,
+  getSocket,
+} from "@/lib/socket/client";
+import { useAuthStore } from "@/store/authStore";
+import { useChatStore } from "@/store/chatStore";
+import { Message } from "@/types/database";
 import { useEffect, useRef } from "react";
 import { Socket } from "socket.io-client";
-import { connectSocket, disconnectSocket, getSocket } from "@/lib/socket/client";
-import { useChatStore } from "@/store/chatStore";
-import { useAuthStore } from "@/store/authStore";
-import { Message } from "@/types/database";
 
 export function useSocket() {
   const socketRef = useRef<Socket | null>(null);
   const { user } = useAuthStore();
-  const { addMessage, addOnlineUser, removeOnlineUser } = useChatStore();
+  const {
+    addMessage,
+    addOnlineUser,
+    removeOnlineUser,
+    updateMessageReaction,
+    setOnlineUsers,
+  } = useChatStore();
 
   useEffect(() => {
     if (!user) return;
@@ -28,6 +38,10 @@ export function useSocket() {
       console.log("Socket disconnected");
     });
 
+    socket.on("onlineUsers", (userIds: string[]) => {
+      setOnlineUsers(userIds);
+    });
+
     socket.on("user:status", (data: { userId: string; isOnline: boolean }) => {
       if (data.isOnline) {
         addOnlineUser(data.userId);
@@ -39,6 +53,20 @@ export function useSocket() {
     socket.on("message:new", (message: Message) => {
       addMessage(message.roomId, message);
     });
+
+    socket.on(
+      "reaction:update",
+      (data: { messageId: string; reactions: { [key: string]: string[] } }) => {
+        const { selectedRoom } = useChatStore.getState();
+        if (selectedRoom) {
+          updateMessageReaction(
+            selectedRoom.id,
+            data.messageId,
+            data.reactions,
+          );
+        }
+      },
+    );
 
     return () => {
       if (user) {
@@ -64,16 +92,6 @@ export function useSocketChat(chatRoomId: string | null) {
     };
   }, [chatRoomId, socket]);
 
-  const sendMessage = (content: string, senderId: string) => {
-    if (!chatRoomId) return;
-
-    socket.emit("message:send", {
-      chatRoomId,
-      senderId,
-      content,
-    });
-  };
-
   const startTyping = (userId: string) => {
     if (!chatRoomId) return;
     socket.emit("typing:start", { chatRoomId, userId });
@@ -84,6 +102,5 @@ export function useSocketChat(chatRoomId: string | null) {
     socket.emit("typing:stop", { chatRoomId, userId });
   };
 
-  return { sendMessage, startTyping, stopTyping };
+  return { startTyping, stopTyping };
 }
-

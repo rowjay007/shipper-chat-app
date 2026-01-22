@@ -68,7 +68,10 @@ export function UserList() {
   }
 
   return (
-    <ScrollArea className="flex-1" style={{ minHeight: 0, maxHeight: '100%', overflow: 'hidden' }}>
+    <ScrollArea
+      className="flex-1"
+      style={{ minHeight: 0, maxHeight: "100%", overflow: "hidden" }}
+    >
       <div className="space-y-1 p-2">
         {filteredRooms.map((room) => (
           <UserListItem key={room.id} room={room} />

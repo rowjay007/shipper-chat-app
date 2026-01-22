@@ -12,11 +12,11 @@ import { createClient } from "@/lib/supabase/client";
 import { cn, getInitials } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import {
-  ArrowLeft,
   Compass,
   Folder,
   Gift,
   Image,
+  LogOut,
   MessageCircle,
   PenSquare,
   Star,
@@ -31,7 +31,9 @@ export function MiniSidebar() {
   const pathname = usePathname();
 
   const getRandomAvatar = (name: string) => {
-    const seed = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const seed = name
+      .split("")
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return `https://api.dicebear.com/7.x/avataaars/png?seed=${seed}&size=128`;
   };
 
@@ -56,9 +58,9 @@ export function MiniSidebar() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="mb-8 flex h-11 w-11 items-center justify-center hover:opacity-80 transition-opacity">
-            <img 
-              src="/Container.svg" 
-              alt="Menu" 
+            <img
+              src="/Container.svg"
+              alt="Menu"
               className="h-11 w-11"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
@@ -76,7 +78,7 @@ export function MiniSidebar() {
         >
           <div className="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors rounded-xl">
             <div className="flex items-center gap-3">
-              <ArrowLeft className="h-4 w-4 text-gray-600" />
+              <img src="/go-back.png" alt="Go back" className="h-4 w-4" />
               <span className="text-sm font-medium">Go back to dashboard</span>
             </div>
           </div>
@@ -124,9 +126,9 @@ export function MiniSidebar() {
           <DropdownMenuSeparator className="my-1" />
           <DropdownMenuItem
             onClick={handleLogout}
-            className="px-4 py-3 text-red-600 rounded-xl"
+            className="px-4 py-3 rounded-xl text-gray-600"
           >
-            <img src="/logout.png" alt="Logout" className="mr-3 h-4 w-4" />
+            <LogOut className="mr-3 h-4 w-4" />
             <span className="text-sm font-medium">Log out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -147,7 +149,7 @@ export function MiniSidebar() {
                 "flex h-12 w-12 items-center justify-center rounded-xl transition-all border",
                 isActive
                   ? "bg-[#F0FDF4] border-[#1E9A80]"
-                  : "border-transparent hover:bg-gray-100"
+                  : "border-transparent hover:bg-gray-100",
               )}
               title={item.label}
             >
@@ -172,7 +174,7 @@ export function MiniSidebar() {
               "flex h-12 w-12 items-center justify-center rounded-xl transition-all border",
               pathname === "/chat/ai"
                 ? "bg-[#F0FDF4] border-[#1E9A80] text-teal-600"
-                : "border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                : "border-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900",
             )}
             title="AI Chat"
           >

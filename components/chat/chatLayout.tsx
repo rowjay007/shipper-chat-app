@@ -15,12 +15,17 @@ import { ContactInfo } from "./contactInfo";
 import { MiniSidebar } from "./miniSidebar";
 
 export function ChatLayout() {
+  console.log("ChatLayout rendered");
+  console.log("ChatLayout rendered");
+  console.log("ChatLayout rendered");
   const { setUser, user } = useAuthStore();
   const { showContactInfo } = useUIStore();
   useSocket();
 
   const getRandomAvatar = (name: string) => {
-    const seed = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const seed = name
+      .split("")
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return `https://api.dicebear.com/7.x/avataaars/png?seed=${seed}&size=128`;
   };
 
@@ -67,18 +72,24 @@ export function ChatLayout() {
   }, [setUser]);
 
   return (
-    <div className="flex h-screen w-full bg-[#F3F3EE] overflow-hidden" style={{ position: 'relative' }}>
+    <div
+      className="flex h-screen w-full bg-[#F3F3EE] overflow-hidden"
+      style={{ position: "relative" }}
+    >
       <MiniSidebar />
 
-      <div className="flex flex-1 flex-col overflow-hidden" style={{ maxHeight: '100vh', position: 'relative', width: '100%' }}>
+      <div
+        className="flex flex-1 flex-col overflow-hidden"
+        style={{ maxHeight: "100vh", position: "relative", width: "100%" }}
+      >
         {/* Top Message Search Bar - Fixed at top, never moves */}
-        <div 
+        <div
           className="flex items-center justify-between bg-white border-b px-6 py-4 mx-3 mt-3 mb-0 shadow-sm flex-shrink-0"
-          style={{ 
-            height: '76px',
-            position: 'relative',
+          style={{
+            height: "76px",
+            position: "relative",
             zIndex: 100,
-            borderRadius: 0
+            borderRadius: 0,
           }}
         >
           <div className="flex items-center gap-3">
@@ -86,53 +97,59 @@ export function ChatLayout() {
             <h1 className="text-xl font-semibold text-gray-900">Message</h1>
           </div>
           <div className="flex items-center gap-4">
-            <div className="relative" style={{ width: '300px', height: '32px' }}>
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10" style={{ width: '14px', height: '14px' }} />
+            <div
+              className="relative"
+              style={{ width: "300px", height: "32px" }}
+            >
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10"
+                style={{ width: "14px", height: "14px" }}
+              />
               <Input
                 type="text"
                 placeholder="Search"
                 className="border-gray-200 text-sm"
                 style={{
-                  width: '300px',
-                  height: '32px',
-                  borderRadius: '10px',
-                  borderWidth: '1px',
-                  background: '#FFFFFF',
-                  paddingTop: '10px',
-                  paddingRight: '56px',
-                  paddingBottom: '10px',
-                  paddingLeft: '36px'
+                  width: "300px",
+                  height: "32px",
+                  borderRadius: "10px",
+                  borderWidth: "1px",
+                  background: "#FFFFFF",
+                  paddingTop: "10px",
+                  paddingRight: "56px",
+                  paddingBottom: "10px",
+                  paddingLeft: "36px",
                 }}
               />
-              <button 
+              <button
                 type="button"
                 className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center hover:opacity-80 transition-opacity z-10"
                 style={{
-                  width: '40px',
-                  height: '24px',
-                  gap: '4px',
-                  background: '#F3F3EE',
-                  borderRadius: '6px',
-                  paddingTop: '5px',
-                  paddingRight: '6px',
-                  paddingBottom: '5px',
-                  paddingLeft: '6px'
+                  width: "40px",
+                  height: "24px",
+                  gap: "4px",
+                  background: "#F3F3EE",
+                  borderRadius: "6px",
+                  paddingTop: "5px",
+                  paddingRight: "6px",
+                  paddingBottom: "5px",
+                  paddingLeft: "6px",
                 }}
               >
-                <img 
-                  src="/⌘+K.svg" 
-                  alt="⌘+K" 
-                  style={{ 
-                    width: '26px',
-                    height: '10px',
-                    objectFit: 'contain',
-                    display: 'block',
-                    flexShrink: 0
+                <img
+                  src="/⌘+K.svg"
+                  alt="⌘+K"
+                  style={{
+                    width: "26px",
+                    height: "10px",
+                    objectFit: "contain",
+                    display: "block",
+                    flexShrink: 0,
                   }}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     const currentSrc = target.src;
-                    if (!currentSrc.includes('⌘+K.png')) {
+                    if (!currentSrc.includes("⌘+K.png")) {
                       target.src = "/⌘+K.png";
                     }
                   }}
@@ -156,18 +173,18 @@ export function ChatLayout() {
                   {user?.name ? getInitials(user.name) : "U"}
                 </AvatarFallback>
               </Avatar>
-              <svg 
-                width="8" 
-                height="4" 
-                viewBox="0 0 8 4" 
-                fill="none" 
-                style={{ position: 'relative', top: '6px', left: '4px' }}
+              <svg
+                width="8"
+                height="4"
+                viewBox="0 0 8 4"
+                fill="none"
+                style={{ position: "relative", top: "6px", left: "4px" }}
               >
-                <path 
-                  d="M1 0.5L4 3.5L7 0.5" 
-                  stroke="#262626" 
-                  strokeWidth="1.5" 
-                  strokeLinecap="round" 
+                <path
+                  d="M1 0.5L4 3.5L7 0.5"
+                  stroke="#262626"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               </svg>
@@ -176,38 +193,38 @@ export function ChatLayout() {
         </div>
 
         {/* Bottom Section: All Messages + Main Chat - Constrained to remaining space */}
-        <div 
+        <div
           className="flex gap-3 px-3 py-3"
-          style={{ 
-            height: 'calc(100vh - 112px)',
-            maxHeight: 'calc(100vh - 112px)',
-            minHeight: 'calc(100vh - 112px)',
-            width: '100%',
-            position: 'relative',
+          style={{
+            height: "calc(100vh - 112px)",
+            maxHeight: "calc(100vh - 112px)",
+            minHeight: "calc(100vh - 112px)",
+            width: "100%",
+            position: "relative",
             zIndex: 1,
-            overflow: 'hidden',
-            boxSizing: 'border-box'
+            overflow: "hidden",
+            boxSizing: "border-box",
           }}
         >
           <ChatSidebar />
-          <main 
-            className="flex flex-col bg-white rounded-2xl shadow-sm" 
-            style={{ 
-              flex: '1 1 0',
+          <main
+            className="flex flex-col bg-white rounded-2xl shadow-sm"
+            style={{
+              flex: "1 1 0",
               minWidth: 0,
-              maxHeight: '100%',
+              maxHeight: "100%",
               minHeight: 0,
-              overflow: 'hidden'
+              overflow: "hidden",
             }}
           >
             <ChatWindow />
           </main>
-          <div 
+          <div
             className="flex-shrink-0"
-            style={{ 
-              width: showContactInfo ? '384px' : '0px',
-              overflow: 'hidden',
-              transition: 'width 0.2s ease'
+            style={{
+              width: showContactInfo ? "384px" : "0px",
+              overflow: "hidden",
+              transition: "width 0.2s ease",
             }}
           >
             {showContactInfo && <ContactInfo />}
